@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{% import_yaml 'rabbitmq/defaults.yaml' as default_settings %}
+
+{% set os_family_map = salt['grains.filter_by']({
+        'Debian': {
+            "sysconfdir" : '/etc/default',
+        },
+        'RedHat': {
+            "sysconfdir": '/etc/sysconfig',
+        },
+  }
+  , grain="os_family"
+  , merge=salt['pillar.get']('rabbitmq:lookup'))
+%}
+{% do default_settings.rabbitmq.update(os_family_map) %}
+
+{% set rabbitmq = salt['pillar.get'](
+        'rabbitmq',
+        default=default_settings.rabbitmq,
+        merge=True
+    )
+%}

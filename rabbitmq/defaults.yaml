@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+rabbitmq:
+  pkgs: 
+    - rabbitmq-server
+  service:
+    name: rabbitmq-server
+    state: running
+    enable: True
+  conffile: '/etc/rabbitmq/rabbitmq.config'
+  
+  # default settings
+  conf:
+    'without_section_pre':
+      opt-without-section-at-beginning-of-file: 'enabled'
+    '[sect1]':
+      opt1: value1
+    '[sect2]':
+      opt2: value2
+    'without_section_post':
+      opt-without-section-at-end-of-file-will-be-in-last-section: 'enabled'
