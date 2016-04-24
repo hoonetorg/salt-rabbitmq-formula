@@ -8,6 +8,10 @@ rabbitmq:
     state: running
     enable: True
   conffile: '/etc/rabbitmq/rabbitmq.config'
+  confenvfile: '/etc/rabbitmq/rabbitmq-env.conf'
+  user: rabbitmq
+  group: rabbitmq
+  erlang_cookie_file: /var/lib/rabbitmq/.erlang.cookie
   
   # default settings
   conf:
@@ -19,3 +23,6 @@ rabbitmq:
       opt2: value2
     'without_section_post':
       opt-without-section-at-end-of-file-will-be-in-last-section: 'enabled'
+  confenv:
+    'without_section_pre':
+      'NODE_IP_ADDRESS': ""
