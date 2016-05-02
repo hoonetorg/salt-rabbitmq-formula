@@ -7,21 +7,21 @@
 {% set rabbitmq = salt['pillar.get']('rabbitmq:lookup:pcs', {}) %}
 
 {% if rabbitmq.rabbitmq_cib is defined and rabbitmq.rabbitmq_cib %}
-rabbitmq_pcs__cib_created_{{rabbitmq.rabbitmq_cib}}:
-  pcs.cib_created:
+rabbitmq_pcs__cib_present_{{rabbitmq.rabbitmq_cib}}:
+  pcs.cib_present:
     - cibname: {{rabbitmq.rabbitmq_cib}}
 {% endif %}
 
 {% if 'resources' in rabbitmq %}
 {% for resource, resource_data in rabbitmq.resources.items()|sort %}
-rabbitmq_pcs__resource_created_{{resource}}:
-  pcs.resource_created:
+rabbitmq_pcs__resource_present_{{resource}}:
+  pcs.resource_present:
     - resource_id: {{resource}}
     - resource_type: "{{resource_data.resource_type}}"
     - resource_options: {{resource_data.resource_options|json}}
 {% if rabbitmq.rabbitmq_cib is defined and rabbitmq.rabbitmq_cib %}
     - require:
-      - pcs: rabbitmq_pcs__cib_created_{{rabbitmq.rabbitmq_cib}}
+      - pcs: rabbitmq_pcs__cib_present_{{rabbitmq.rabbitmq_cib}}
     - require_in:
       - pcs: rabbitmq_pcs__cib_pushed_{{rabbitmq.rabbitmq_cib}}
     - cibname: {{rabbitmq.rabbitmq_cib}}
@@ -31,14 +31,14 @@ rabbitmq_pcs__resource_created_{{resource}}:
 
 {% if 'constraints' in rabbitmq %}
 {% for constraint, constraint_data in rabbitmq.constraints.items()|sort %}
-rabbitmq_pcs__constraint_created_{{constraint}}:
-  pcs.constraint_created:
+rabbitmq_pcs__constraint_present_{{constraint}}:
+  pcs.constraint_present:
     - constraint_id: {{constraint}}
     - constraint_type: "{{constraint_data.constraint_type}}"
     - constraint_options: {{constraint_data.constraint_options|json}}
 {% if rabbitmq.rabbitmq_cib is defined and rabbitmq.rabbitmq_cib %}
     - require:
-      - pcs: rabbitmq_pcs__cib_created_{{rabbitmq.rabbitmq_cib}}
+      - pcs: rabbitmq_pcs__cib_present_{{rabbitmq.rabbitmq_cib}}
     - require_in:
       - pcs: rabbitmq_pcs__cib_pushed_{{rabbitmq.rabbitmq_cib}}
     - cibname: {{rabbitmq.rabbitmq_cib}}
